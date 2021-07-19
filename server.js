@@ -107,11 +107,13 @@ app.post('/api/shorturl', function (req, res) {
 
   if (validUrl.isUri(url)) {
     urlObj = new URL(url)
+    if (!urlObj.protocol.includes('http')) {
+      error = "invalid url";
+    }
   }
   else {
     error = "invalid url";
   }
-
   if (error) {
     res.json({ error: "invalid url" });
   } else {
