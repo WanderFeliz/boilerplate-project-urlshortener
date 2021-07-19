@@ -107,6 +107,7 @@ app.post('/api/shorturl', function (req, res) {
   let { url } = req.body;
   const { urlSeq } = res.locals.customData
   let urlObj;
+  let regex = /^https?:\/\//
   let error;
   if (!url.trim()) {
     url = `${req.protocol}://${req.headers.host}`
@@ -114,7 +115,7 @@ app.post('/api/shorturl', function (req, res) {
 
   if (validUrl.isUri(url)) {
     urlObj = new URL(url)
-    if (!urlObj.protocol.includes('http')) {
+    if (!regex.test(url)) {
       error = "invalid url";
     }
   }
@@ -125,7 +126,7 @@ app.post('/api/shorturl', function (req, res) {
     res.json({ error: "invalid url" });
   } else {
 
-    createAndSaveUrl(urlObj.origin, urlSeq, (err, data) => {
+    createAndSaveUrl(urlObj.href, urlSeq, (err, data) => {
       if (err) {
         console.log(err);
       }
