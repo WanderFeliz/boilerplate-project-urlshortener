@@ -85,10 +85,14 @@ app.get('/api/shorturl/:id', function(req, res) {
   const {id} = req.params;
 
   findUrl({seq: id}).then((url)=>{
-    let {original_url} = url?._doc
+    let original_url = url?._doc.original_url || '/'
     res.redirect(original_url);
   });
     
+});
+
+app.get('/api/shorturl', function(req, res) {
+  res.redirect('/');
 });
 
 app.post('/api/shorturl', function(req, res) {
