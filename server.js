@@ -86,8 +86,15 @@ app.get('/api/shorturl/:id', function (req, res) {
   const { id } = req.params;
 
   findUrl({ seq: id }).then((url) => {
-    let original_url = url?._doc.original_url || '/'
-    res.redirect(original_url);
+    let original_url = url?._doc.original_url
+    if (original_url) {
+      res.redirect(original_url);
+    } else {
+      return res.json({
+        error: 'No found'
+      });
+    }
+
   });
 
 });
