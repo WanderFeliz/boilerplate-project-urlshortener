@@ -92,10 +92,14 @@ app.get('/api/shorturl/:id', function(req, res) {
 });
 
 app.post('/api/shorturl', function(req, res) {
-  const {url} = req.body;
+  let {url} = req.body;
   const {urlSeq} = res.locals.customData
   let urlObj;
   let error;
+  if (!url.trim()){
+    url = `${req.protocol}://${req.headers.host}`
+  }
+  
   try{
     urlObj = new URL(url)
     if (!urlObj.protocol.includes('http')){
