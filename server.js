@@ -83,7 +83,7 @@ app.get('/', function(req, res) {
 // Your first API endpoint
 app.get('/api/shorturl/:id', function(req, res) {
   const {id} = req.params;
-  
+
   findUrl({seq: id}).then((url)=>{
     let {original_url} = url?._doc
     res.redirect(original_url);
@@ -98,6 +98,9 @@ app.post('/api/shorturl', function(req, res) {
   let error;
   try{
     urlObj = new URL(url)
+    if (!urlObj.protocol.includes('http')){
+      error = "invalid url";
+    }
   }catch(err){
     error = "invalid url";
   }
